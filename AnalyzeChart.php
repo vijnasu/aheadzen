@@ -298,6 +298,8 @@ class AnalyzeChart
 		foreach( $all_planets as $p )
 		{
 			$reference = $planets[$p]['fulldegree'];
+
+//	Calculate house start fulldegree for a given planet.
 			$pointHouseDegree = $this->deltaDegrees( 15, $reference );
 			
 			foreach( $all_planets as $pp )
@@ -305,8 +307,10 @@ class AnalyzeChart
 				if( $p == $pp || $pp == 'ASC' )
 					continue;
 
+//Find relative house position of two points/planets. Here we are trying to find position of planet $pp from another planet $p. 
 				$planetInHouse = $this->inHouseRelativeTo( $pointHouseDegree, $planets[$pp]['fulldegree']);
-			
+
+			// Reverse Drishti is just another way of finding aspects of planets. For e.g. if Saturn is located in 4th house or 11th house from Moon, it will cast its aspect on Moon.
 				if( in_array($planetInHouse, AstroData::$REVERSE_DRISHTI[$pp] ) )
 				{
 					$houseAspectDegree = (12 - ($planetInHouse - 1)) * 30;
@@ -384,6 +388,15 @@ class AnalyzeChart
 	{
 		return AstroData::$ZODIAC_SIGNS_LORD[$zodiac_sign];
 	}
+/**
+ * function inHouseRelativeTo
+ * 
+ * Quickly calculates house position of a point from a reference.
+ * 
+ * @param float $ref Reference fulldegree usually Ascendant, Sun or Moon.
+ * @param float $transitPoint Any point fulldegree whose house position is to be determined.
+ * @return int House number from Reference.
+ */
 	private function inHouseRelativeTo( $ref, $transitPoint )
 	{
 		$deltaDegrees = $this->deltaDegrees( $ref, $transitPoint );
