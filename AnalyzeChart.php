@@ -30,38 +30,40 @@ class AnalyzeChart
 
 		//$this->referenceFrom( $planets['Sun']['fulldegree'] );
 
-		$list = $this->getAuspicousPlanets( $houses['ASC']['sign'] );
-		$list1 = $this->getAuspicousPlanets( $planets['Sun']['sign'] );
-		$list2 = $this->getAuspicousPlanets( $planets['Moon']['sign'] );
+		$auspicious_from_asc = $this->getAuspicousPlanets( $houses['ASC']['sign'] );
+		$auspicious_from_sun = $this->getAuspicousPlanets( $planets['Sun']['sign'] );
+		$auspicious_from_moon = $this->getAuspicousPlanets( $planets['Moon']['sign'] );
 
 
-		
 		$position = array( 'GOOD' => array(), 'BAD' => array());
 		$ascHouseDegree = $this->deltaDegrees( 15, $houses['ASC']['fulldegree'] );
 
 		foreach( AstroData::$GOOD_PLANETS as $good )
 		{
 			
-			if( in_array( $this->inHouseRelativeTo( $ascHouseDegree, $planets[$good]['fulldegree'] ), AstroData::$POSITION_GOOD_BAD['GOOD'] ) )
+			if( in_array( $this->inHouseRelativeTo( $ascHouseDegree, $planets[$good]['fulldegree'] ),
+			    	      AstroData::$POSITION_GOOD_BAD['GOOD'] ) )
 				$position['GOOD'][] = $good;
 			else $position['BAD'][] = $good;
 		}
 		foreach( AstroData::$BAD_PLANETS as $bad )
 		{
-			if( in_array( $this->inHouseRelativeTo( $ascHouseDegree, $planets[$bad]['fulldegree'] ), AstroData::$POSITION_GOOD_BAD['BAD'] ) )
+			if( in_array( $this->inHouseRelativeTo( $ascHouseDegree, $planets[$bad]['fulldegree'] ),
+			    	      AstroData::$POSITION_GOOD_BAD['BAD'] ) )
 				$position['GOOD'][] = $bad;
 			else $position['BAD'][] = $bad;
 
 			if( $bad == 'Rahu' || $bad == 'Ketu' )
 			{
-				if( in_array( $this->inHouseRelativeTo( $ascHouseDegree, $planets[$bad]['fulldegree'] ), AstroData::$POSITION_GOOD_BAD['BAD'] ) )
+				if( in_array( $this->inHouseRelativeTo( $ascHouseDegree,
+				    	      $planets[$bad]['fulldegree'] ), AstroData::$POSITION_GOOD_BAD['BAD'] ) )
 					$position['GOOD'][] = $bad;
 				else $position['BAD'][] = $bad;
 			}
 
 		}
 
-		$grandlist = array_merge_recursive( $list, $position );
+		$grandlist = array_merge_recursive( $auspicious_from_asc, $position );
 		$good = array_count_values( $grandlist['GOOD'] );
 		$bad = array_count_values( $grandlist['BAD'] );
 		$killer = array_count_values( $grandlist['KILLER'] );
@@ -73,7 +75,10 @@ class AnalyzeChart
 		$this->referenceFrom( $planets, $houses['ASC'] );
 		foreach( $all_planets as $p )
 		{
-			$true[$p] = $good[$p]*10 - $bad[$p]*10 - $killer[$p]*0 + $yogakaraka[$p]*10 + $this->calculateExaltationStrength($p, $planets[$p]['fulldegree'] ) + $this->calculateRashiStrength( $p, $planets[$p]['sign'] ) + $this->getAspectScore( $p );
+			$true[$p] = $good[$p]*10 - $bad[$p]*10 + $yogakaraka[$p]*10 +
+				    $this->calculateExaltationStrength($p, $planets[$p]['fulldegree'] ) +
+				    $this->calculateRashiStrength( $p, $planets[$p]['sign'] ) +
+				    $this->getAspectScore( $p );
 		}
 		arsort( $true );
 		$this->_Potency = $true;
@@ -109,11 +114,16 @@ class AnalyzeChart
 		{
 			foreach( $type as $partner_planet )
 			{
-				if( $this->_SynastryAspectDetails[$base_planet][$partner_planet]['aspect_type'] == 'Problems' && in_array( $partner_planet, AstroData::$GOOD_PLANETS ) )
+				if( $this->_SynastryAspectDetails[$base_planet][$partner_planet]['aspect_type'] ==
+				    'Problems' && in_array( $partner_planet, AstroData::$GOOD_PLANETS ) )
 					$total = 0;
-				else if( $this->_SynastryAspectDetails[$base_planet][$partner_planet]['aspect_type'] == 'Problems' && in_array( $partner_planet, AstroData::$BAD_PLANETS ) )
+				else if( $this->_SynastryAspectDetails[$base_planet][$partner_planet]['aspect_type'] ==
+				     	 'Problems' && in_array( $partner_planet, AstroData::$BAD_PLANETS ) )
 					$total = 0;
-				else if( in_array( $partner_planet, AstroData::$GOOD_PLANETS ) || $partner_planet == 'ASC' || $this->_SynastryAspectDetails[$base_planet][$partner_planet]['aspect_type'] == 'trine' )
+				else if( in_array( $partner_planet, AstroData::$GOOD_PLANETS ) ||
+				     	 $partner_planet == 'ASC' ||
+					 $this->_SynastryAspectDetails[$base_planet][$partner_planet]['aspect_type'] ==
+					 'trine' )
 					$total = 5;
 				else $total = 0;
 				$this->_SynastryAspectDetails[$base_planet][$partner_planet]['score'] = $total;
@@ -193,7 +203,9 @@ class AnalyzeChart
 				if( $partner_planet == 'ASC' )
 				{
 					$multiplier = 1;
-					if( $base_planet_name == 'Sun' || $base_planet_name == 'Moon' || $base_planet_name == 'ASC' )
+					if( $base_planet_name == 'Sun' ||
+					    $base_planet_name == 'Moon' ||
+					    $base_planet_name == 'ASC' )
 						$multiplier = 2;
 
 					$this->_SynastryPotency['LIFE_LONG'] += $base_planet['score']*$multiplier;
@@ -226,7 +238,8 @@ class AnalyzeChart
 	{
 		$planets = $partner_chart->getPlanets();
 		$houses = $partner_chart->getHouses();
-		$reverse_aspects = array_merge( AstroData::$REVERSE_DRISHTI, array ( 'Trines' => array(5,9), 'Problems' => array(6,8,12) ) );
+		$reverse_aspects = array_merge( AstroData::$REVERSE_DRISHTI,
+				   		array ( 'Trines' => array(5,9), 'Problems' => array(6,8,12) ) );
 
 		$planets['ASC'] = $houses['ASC'];
 
@@ -244,15 +257,18 @@ class AnalyzeChart
 				if( $pp == 'ASC' )
 				{
 					$planet_name = 'Jupiter';
-					$planetInHouse = $this->inHouseRelativeTo( $pointHouseDegree, $this->_ChartInfo['house'][$pp]['fulldegree'] );
+					$planetInHouse = $this->inHouseRelativeTo( $pointHouseDegree,
+						       $this->_ChartInfo['house'][$pp]['fulldegree'] );
 				}
 				else
 				{
 					$planet_name = $pp;
-					$planetInHouse = $this->inHouseRelativeTo( $pointHouseDegree, $this->_ChartInfo['planet'][$pp]['fulldegree'] );
+					$planetInHouse = $this->inHouseRelativeTo( $pointHouseDegree,
+						       $this->_ChartInfo['planet'][$pp]['fulldegree'] );
 				}
 			
-				if( in_array($planetInHouse, $reverse_aspects[$planet_name] ) || in_array($planetInHouse, $reverse_aspects['Trines'] ) )
+				if( in_array($planetInHouse, $reverse_aspects[$planet_name] ) ||
+				    in_array($planetInHouse, $reverse_aspects['Trines'] ) )
 				{
 					$houseAspectDegree = (12 - ($planetInHouse - 1)) * 30;
 					if( !isset( $SynastryAspects[$p] ) )
@@ -307,10 +323,12 @@ class AnalyzeChart
 				if( $p == $pp || $pp == 'ASC' )
 					continue;
 
-//Find relative house position of two points/planets. Here we are trying to find position of planet $pp from another planet $p. 
+// Find relative house position of two points/planets.
+// Here we are trying to find position of planet $pp from another planet $p. 
 				$planetInHouse = $this->inHouseRelativeTo( $pointHouseDegree, $planets[$pp]['fulldegree']);
 
-			// Reverse Drishti is just another way of finding aspects of planets. For e.g. if Saturn is located in 4th house or 11th house from Moon, it will cast its aspect on Moon.
+// Reverse Drishti is just another way of finding aspects of planets.
+// For e.g. if Saturn is located in 4th house or 11th house from Moon, it will cast its aspect on Moon.
 				if( in_array($planetInHouse, AstroData::$REVERSE_DRISHTI[$pp] ) )
 				{
 					$houseAspectDegree = (12 - ($planetInHouse - 1)) * 30;
