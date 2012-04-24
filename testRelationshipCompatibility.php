@@ -160,13 +160,18 @@ foreach ( $relationship_calculator->influencing_ascendant_lord as $planet )
 }
 echo end_ul();
 
-echo "TODO: 'Person M has both benefic and malefic influences on Ascendant and Ascendant Lord, which indicates minor health issues this person might have.'";
+echo "TODO: 'Person M has both benefic and malefic influences on Ascendant and Ascendant Lord, which indicates minor health issues this person might have.'", br();
+echo "CLARIFICATION: I understand how to figure if the influences are benefic or malefic.  I need to know what each of the following options indicates:";
+echo begin_ul(), li("Only Benefic"), li("Only Malefic"), li("Both Benefic and Malefic (already in example)"),
+     li("No Influences"), end_ul();
 
 echo h5( "Position" );
 echo $relationship_calculator->ascendant_lord, " is in the ",
      $relationship_calculator->ascendant_lord_house,
      " house from the Ascendant. ",
-     $relationship_calculator->ascendant_lord_positional, br(), br();
+     $relationship_calculator->ascendant_lord_positional, br();
+echo "CLARIFICATION: The example has 12th house here... is this supposed to match the example?  I'm using \$this->_ChartInfo['planet'][\$this->ascendant_lord]['house'] in AnalyzeChart and I'm getting 11. ",
+     "Additionally, can you better explain the 2-12 relationship bit.  I see you have 2-12, 6-8, and 4-10 as difficult, but it's under the heading of relative position between two points.  I understood it to mean 2 and 12, 6 and 8, 4 and 10, but I'm not sure I understood since here we are only dealing with the position of the Sun.  Finally, what about the part about minor health issues.  Do all difficult positions indicate minor health issues, or is it more complex than that?", br(), br(); 
 
 
 
