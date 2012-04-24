@@ -103,6 +103,9 @@ class AnalyzeChart
 		$this->influencing_ascendant_lord = $this->calculateInfluences( $this->_ChartInfo['house'][1],
 						    				$this->_ChartInfo['planet'],
 										$this->ascendant_lord );
+
+		$this->ascendant_lord_house = $this->ordinal( $this->_ChartInfo['planet'][$this->ascendant_lord]['house'] );
+		$this->ascendant_lord_positional = "TODO: 'So it is a 2-12 relationship which is not good for Ascendant. Indicates minor health issues.'";
 	}
 	private function calculateInfluences( $ascendant, $planets, $target )
 	{
@@ -118,6 +121,14 @@ class AnalyzeChart
 		}
 		return $influences;
 	}
+	private function ordinal($n)
+	{ 
+		$test_c = abs($n) % 10;
+	        $ext = ((abs($n) % 100 < 21 && abs($n) % 100 > 4) ? 'th'
+            	     : (($test_c < 4) ? ($test_c < 3) ? ($test_c < 2) ? ($test_c < 1)
+            	     ? 'th' : 'st' : 'nd' : 'rd' : 'th'));
+    		return $n.$ext;
+	}  
 	private function getAspectScore( $planet )
 	{
 		$total = 0;
@@ -335,7 +346,7 @@ class AnalyzeChart
 		$this->_SynastryAspectDetails = $SynastryAspectsDetails;
 		$this->calculateSynastryAspectScore();
 		$this->calculateSynastryPotency();
-		var_dump( $this->_SynastryAspects, $this->_SynastryAspectDetails, $this->_SynastryPotency );
+//		var_dump( $this->_SynastryAspects, $this->_SynastryAspectDetails, $this->_SynastryPotency );
 	}
 	private function referenceFrom( $planets, $asc )
 	{

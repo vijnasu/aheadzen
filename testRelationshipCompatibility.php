@@ -160,8 +160,13 @@ foreach ( $relationship_calculator->influencing_ascendant_lord as $planet )
 }
 echo end_ul();
 
-echo "TODO: 'Person M has both benefic and malefic influences on Ascendant and Ascendant Lord, which indicates minor health issues this person might have.'", br(), br();
+echo "TODO: 'Person M has both benefic and malefic influences on Ascendant and Ascendant Lord, which indicates minor health issues this person might have.'";
 
+echo h5( "Position" );
+echo $relationship_calculator->ascendant_lord, " is in the ",
+     $relationship_calculator->ascendant_lord_house,
+     " house from the Ascendant. ",
+     $relationship_calculator->ascendant_lord_positional, br(), br();
 
 
 
