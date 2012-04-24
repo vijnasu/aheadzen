@@ -89,6 +89,11 @@ function br()
 	return "<br />";
 }
 
+function h5()
+{
+	return "<h5>" . implode(func_get_args()) . "</h5>";
+}
+
 function h4()
 {
 	return "<h4>" . implode(func_get_args()) . "</h4>";
@@ -102,6 +107,21 @@ function h3()
 function h2()
 {
 	return "<h2>" . implode(func_get_args()) . "</h2>";
+}
+
+function begin_ul()
+{
+	return "<ul>";
+}
+
+function end_ul()
+{
+	return "</ul>";
+}
+
+function li()
+{
+	return "<li>" . implode( func_get_args() ) . "</li>";
 }
 
 $male_report = new AstroReport($male_data); 
@@ -118,8 +138,26 @@ echo h2($male_data['report_name'], ' and ', $female_data['report_name']);
 echo h3("Analyzing Capacity to Love");
 
 echo h4($male_data['report_name']);
-echo "Ascendant: ", $relationship_calculator->ascendant, br();
+echo "Ascendant: ", $relationship_calculator->ascendant_name, br();
 echo "Ascendant Lord: ", $relationship_calculator->ascendant_lord, br(), br();
+
+echo h5("Planets Influencing Ascendant");
+
+echo begin_ul();
+foreach ( $relationship_calculator->influencing_ascendant as $planet )
+{
+	echo li( $planet );
+}
+echo end_ul();
+
+
+
+
+
+
+
+
+
 
 echo "Male Nakshatra: ";
 echo $kuta_calculator->male_nakshatra, br();

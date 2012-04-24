@@ -21,7 +21,7 @@ class AnalyzeChart
 
 	private $_partner_report;
 	private $_partner_planets;
-	public $ascendant;
+	public $ascendant_name;
 	public $ascendant_lord;
 	
 	public function __construct($chart)
@@ -95,8 +95,25 @@ class AnalyzeChart
 		$this->_partner_report = $partner_report;
 		$this->_partner_planets = $this->_partner_report->getPlanets();
 
-		$this->ascendant = $this->_ChartInfo['house'][1]['sign'];
-		$this->ascendant_lord = AstroData::$ZODIAC_SIGNS_LORD[$this->_ChartInfo['house'][1]['sign']];
+		$this->ascendant_name = $this->_ChartInfo['house'][1]['sign'];
+		$this->ascendant_lord = AstroData::$ZODIAC_SIGNS_LORD[$this->ascendant_name];
+
+		$this->influencing_ascendant = $this->calculateInfluences( $this->_ChartInfo['house'][1],
+									   $this->_ChartInfo['planet'], 'ASC' );
+	}
+	private function calculateInfluences( $ascendant, $planets, $target )
+	{
+		$this->referenceFrom( $planets, $ascendant );
+		$influences = array();
+
+		foreach ( $this->_AspectDetails[$target] as $name => $detail )
+		{
+			$target_name = $target;
+			if ( $target == 'ASC')
+			   $target_name = "Ascendant";
+			$influences[] = $name . " " . $detail['aspect_type'] . " " . $target_name;
+		}
+		return $influences;
 	}
 	private function getAspectScore( $planet )
 	{
