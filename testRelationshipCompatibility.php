@@ -111,11 +111,14 @@ $female_report = new AstroReport($female_data);
 $kuta_calculator = new AnalyzeKutas( $male_report, $female_report );
 $kuta_calculator->prepareKutaReport();
 
+$relationship_calculator = new AnalyzeChart( $male_report );
+$relationship_calculator->prepareRelationshipReport( $female_report );
+
 echo h2($male_data['report_name'], ' and ', $female_data['report_name']);
 echo h3("Analyzing Capacity to Love");
 
 echo h4($male_data['report_name']);
-echo "Ascendant: ";
+echo "Ascendant: ", $relationship_calculator->ascendant, br(), br();
 
 echo "Male Nakshatra: ";
 echo $kuta_calculator->male_nakshatra, br();

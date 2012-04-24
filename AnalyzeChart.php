@@ -18,6 +18,10 @@ class AnalyzeChart
 	private $_SynastryPotency = array();
 	const SHOWTIME_STRING = "g:i:s A";
 	const DEGREE_STRING = "fulldegree";
+
+	private $_partner_report;
+	private $_partner_planets;
+	public $ascendant;
 	
 	public function __construct($chart)
 	{
@@ -84,6 +88,13 @@ class AnalyzeChart
 		$this->_Potency = $true;
 		//var_dump( $true );
 
+	}
+	public function prepareRelationshipReport( $partner_report )
+	{
+		$this->_partner_report = $partner_report;
+		$this->_partner_planets = $this->_partner_report->getPlanets();
+
+		$this->ascendant = $this->_ChartInfo['house'][1]['sign'];
 	}
 	private function getAspectScore( $planet )
 	{
