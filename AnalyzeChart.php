@@ -22,6 +22,7 @@ class AnalyzeChart
 	private $_partner_report;
 	private $_partner_planets;
 	public $ascendant;
+	public $ascendant_lord;
 	
 	public function __construct($chart)
 	{
@@ -95,6 +96,7 @@ class AnalyzeChart
 		$this->_partner_planets = $this->_partner_report->getPlanets();
 
 		$this->ascendant = $this->_ChartInfo['house'][1]['sign'];
+		$this->ascendant_lord = AstroData::$ZODIAC_SIGNS_LORD[$this->_ChartInfo['house'][1]['sign']];
 	}
 	private function getAspectScore( $planet )
 	{

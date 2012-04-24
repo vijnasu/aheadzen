@@ -118,7 +118,8 @@ echo h2($male_data['report_name'], ' and ', $female_data['report_name']);
 echo h3("Analyzing Capacity to Love");
 
 echo h4($male_data['report_name']);
-echo "Ascendant: ", $relationship_calculator->ascendant, br(), br();
+echo "Ascendant: ", $relationship_calculator->ascendant, br();
+echo "Ascendant Lord: ", $relationship_calculator->ascendant_lord, br(), br();
 
 echo "Male Nakshatra: ";
 echo $kuta_calculator->male_nakshatra, br();
