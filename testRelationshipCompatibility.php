@@ -89,12 +89,33 @@ function br()
 	return "<br />";
 }
 
+function h4()
+{
+	return "<h4>" . implode(func_get_args()) . "</h4>";
+}
+
+function h3()
+{
+	return "<h3>" . implode(func_get_args()) . "</h3>";
+}
+
+function h2()
+{
+	return "<h2>" . implode(func_get_args()) . "</h2>";
+}
+
 $male_report = new AstroReport($male_data); 
 
 $female_report = new AstroReport($female_data); 
 
 $calculator = new AnalyzeKutas( $male_report, $female_report );
 $calculator->prepareKutaReport();
+
+echo h2($male_data['report_name'], ' and ', $female_data['report_name']);
+echo h3("Analyzing Capacity to Love");
+
+echo h4($male_data['report_name']);
+echo "Ascendant: ";
 
 echo "Male Nakshatra: ";
 echo $calculator->male_nakshatra, br();
