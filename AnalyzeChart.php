@@ -100,6 +100,9 @@ class AnalyzeChart
 
 		$this->influencing_ascendant = $this->calculateInfluences( $this->_ChartInfo['house'][1],
 									   $this->_ChartInfo['planet'], 'ASC' );
+		$this->influencing_ascendant_lord = $this->calculateInfluences( $this->_ChartInfo['house'][1],
+						    				$this->_ChartInfo['planet'],
+										$this->ascendant_lord );
 	}
 	private function calculateInfluences( $ascendant, $planets, $target )
 	{

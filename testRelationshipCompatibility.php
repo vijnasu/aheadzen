@@ -151,6 +151,17 @@ foreach ( $relationship_calculator->influencing_ascendant as $planet )
 echo end_ul();
 
 
+echo h5("Planets Influencing Ascendant Lord- ", $relationship_calculator->ascendant_lord);
+
+echo begin_ul();
+foreach ( $relationship_calculator->influencing_ascendant_lord as $planet )
+{
+	echo li( $planet );
+}
+echo end_ul();
+
+echo "TODO: 'Person M has both benefic and malefic influences on Ascendant and Ascendant Lord, which indicates minor health issues this person might have.'", br(), br();
+
 
 
 
