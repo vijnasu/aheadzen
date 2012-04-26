@@ -157,75 +157,37 @@ echo "Ascendant Lord: ", $relationship_calculator->ascendant_lord, br(), br();
 
 echo h5("Planets Influencing Ascendant");
 
-echo ul( $relationship_calculator->influencing_ascendant );
+echo ul( $relationship_calculator->influences['ASC'] );
 
 
 echo h5("Planets Influencing Ascendant Lord- ", $relationship_calculator->ascendant_lord);
 
-echo ul( $relationship_calculator->influencing_ascendant_lord );
+echo ul( $relationship_calculator->influences['ASCL'] );
 
 echo h5( "Natures Influencing Ascendant" );
-echo ul( $relationship_calculator->natures_influencing_ascendant );
+echo ul( $relationship_calculator->natures_influencing['ASC'] );
 
 echo h5( "Natures Influencing Ascendant Lord" );
-echo ul( $relationship_calculator->natures_influencing_ascendant_lord );
+echo ul( $relationship_calculator->natures_influencing['ASCL'] );
 
 echo h5( "Ascendant Lord Position" );
 echo $relationship_calculator->ascendant_lord, " is in the ",
-     $relationship_calculator->ascendant_lord_house,
+     $relationship_calculator->houses['ASCL'],
      " house from the Ascendant. ",
-     $relationship_calculator->ascendant_lord_positional, br(), br();
+     $relationship_calculator->positionals['ASCL'], br(), br();
 
 
+foreach ( array( 'Moon', 'Sun', 'Venus' ) as $planet )
+	echo h4( $planet, " Analysis" ),
+	     h5( $planet, " Position" ),
+	     $planet, " is in the ",
+     	     $relationship_calculator->houses[$planet],
+     	     " house from the Ascendant. ",
+  	     $relationship_calculator->positionals[$planet],
+	     h5("Planets Influencing ", $planet),
+	     ul( $relationship_calculator->influences[$planet] ),
+	     ul( $relationship_calculator->natures_influencing[$planet] );
 
-echo h4( "Moon Analysis" );
-
-echo h5( "Moon Position" );
-echo "Moon is in the ",
-     $relationship_calculator->moon_house,
-     " house from the Ascendant. ",
-     $relationship_calculator->moon_positional, br(), br();
-
-echo h5("Planets Influencing Moon");
-
-echo ul( $relationship_calculator->influencing_moon );
-
-echo h5( "Natures Influencing Moon" );
-echo ul( $relationship_calculator->natures_influencing_moon );
-
-
-
-echo h4( "Sun Analysis" );
-
-echo h5( "Sun Position" );
-echo "Sun is in the ",
-     $relationship_calculator->sun_house,
-     " house from the Ascendant. ",
-     $relationship_calculator->sun_positional, br(), br();
-
-echo h5("Planets Influencing Sun");
-
-echo ul( $relationship_calculator->influencing_sun );
-
-echo h5( "Natures Influencing Sun" );
-echo ul( $relationship_calculator->natures_influencing_sun );
-
-
-
-echo h4( "Venus Analysis" );
-
-echo h5( "Venus Position" );
-echo "Venus is in the ",
-     $relationship_calculator->venus_house,
-     " house from the Ascendant. ",
-     $relationship_calculator->venus_positional, br(), br();
-
-echo h5("Planets Influencing Venus");
-
-echo ul( $relationship_calculator->influencing_venus );
-
-echo h5( "Natures Influencing Venus" );
-echo ul( $relationship_calculator->natures_influencing_venus );
 
 echo h4( "Marriage and Partnership Analysis" );
 
@@ -233,19 +195,19 @@ echo h5( "7th House: ", $relationship_calculator->seventh_house );
 echo h5( "7th Lord: ", $relationship_calculator->seventh_house_lord );
 
 echo h5( "Planets Influencing 7th House" );
-echo ul( $relationship_calculator->influencing_seventh );
-echo ul( $relationship_calculator->natures_influencing_seventh );
+echo ul( $relationship_calculator->influences[7] );
+echo ul( $relationship_calculator->natures_influencing[7] );
 
 echo h5( "Planets Influencing 7th Lord- ", $relationship_calculator->seventh_house_lord );
-echo ul( $relationship_calculator->influencing_seventh_lord );
-echo ul( $relationship_calculator->natures_influencing_seventh_lord );
+echo ul( $relationship_calculator->influences['7L'] );
+echo ul( $relationship_calculator->natures_influencing['7L'] );
 
 echo h5( "7th Lord Position" );
 echo $relationship_calculator->seventh_house_lord,
      " is in the ",
-     $relationship_calculator->seventh_house_lord_house,
+     $relationship_calculator->houses['7L'],
      " house from the 7th. ",
-     $relationship_calculator->seventh_house_lord_positional, br(), br();
+     $relationship_calculator->positionals['7L'], br(), br();
 
 
 
