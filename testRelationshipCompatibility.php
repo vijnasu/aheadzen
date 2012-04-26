@@ -124,6 +124,17 @@ function li()
 	return "<li>" . implode( func_get_args() ) . "</li>";
 }
 
+function ul( $array )
+{
+	$string = begin_ul();
+	foreach ( $array as $item )
+	{
+		$string.= li( $item );
+	}
+	return $string . end_ul();
+}
+
+
 $male_report = new AstroReport($male_data); 
 
 $female_report = new AstroReport($female_data); 
@@ -143,22 +154,12 @@ echo "Ascendant Lord: ", $relationship_calculator->ascendant_lord, br(), br();
 
 echo h5("Planets Influencing Ascendant");
 
-echo begin_ul();
-foreach ( $relationship_calculator->influencing_ascendant as $planet )
-{
-	echo li( $planet );
-}
-echo end_ul();
+echo ul( $relationship_calculator->influencing_ascendant );
 
 
 echo h5("Planets Influencing Ascendant Lord- ", $relationship_calculator->ascendant_lord);
 
-echo begin_ul();
-foreach ( $relationship_calculator->influencing_ascendant_lord as $planet )
-{
-	echo li( $planet );
-}
-echo end_ul();
+echo ul( $relationship_calculator->influencing_ascendant_lord );
 
 echo "TODO: 'Person M has both benefic and malefic influences on Ascendant and Ascendant Lord, which indicates minor health issues this person might have.'", br();
 
