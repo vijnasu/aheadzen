@@ -38,6 +38,9 @@ class AnalyzeChart
 	public $female_natures_influencing;
 	public $female_houses;
 	public $female_positionals;
+	public $relative_influences;
+	public $female_male_influences;
+	public $male_female_influences;
 
 	public function __construct($chart)
 	{
@@ -207,6 +210,9 @@ class AnalyzeChart
 					    $this->_partner_planets[$this->female_seventh_house_lord]['fulldegree'] );
 		$this->female_houses['7L'] = $this->ordinal( $house_number );
 		$this->female_positionals['7L'] = $this->positionalFromHouseNumber( $house_number );
+
+
+//		$this->relative_influences = 
 	}
 	private function calculateInfluences( $ascendant, $planets, $target )
 	{

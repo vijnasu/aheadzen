@@ -278,17 +278,16 @@ echo $relationship_calculator->female_seventh_house_lord,
 
 
 echo h3( "Interplay of Relationship" ),
-     h4( "Relative House Position of each other's Ascendant, Sun, Moon and Venus." );
-
-
-
+     h4( "Relative House Position of each other's Ascendant, Sun, Moon and Venus." ),
+     ul( $relationship_calculator->relative_influences );
 
 echo h4( "Deeper Synastry Analysis of each other's Ascendant, Sun, Moon and Venus." ),
      h5( "Influences to ", $female_data['report_name'], "'s Planets in ", $male_data['report_name'], "'s chart." );
 
 foreach ( array( 'Ascendant', 'Sun', 'Moon', 'Venus' ) as $planet )
 {
-	echo h5( $planet );
+	echo h5( $planet ),
+	     ul( $relationship_calculator->female_male_influences[$planet] );
 }
 
 echo h5( "Influences to ", $male_data['report_name'], "'s Planets in ", $female_data['report_name'], "'s chart." );
@@ -296,7 +295,8 @@ echo h5( "Influences to ", $male_data['report_name'], "'s Planets in ", $female_
 
 foreach ( array( 'Ascendant', 'Sun', 'Moon', 'Venus' ) as $planet )
 {
-	echo h5( $planet );
+	echo h5( $planet ),
+	     ul( $relationship_calculator->male_female_influences[$planet] );
 }
 
 echo h4( "Marriage Compatibility Based on Indian Astrology" );
