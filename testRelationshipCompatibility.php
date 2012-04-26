@@ -161,7 +161,11 @@ echo h5("Planets Influencing Ascendant Lord- ", $relationship_calculator->ascend
 
 echo ul( $relationship_calculator->influencing_ascendant_lord );
 
-echo "TODO: 'Person M has both benefic and malefic influences on Ascendant and Ascendant Lord, which indicates minor health issues this person might have.'", br();
+echo h5( "Natures Influencing Ascendant" );
+echo ul( $relationship_calculator->natures_influencing_ascendant );
+
+echo h5( "Natures Influencing Ascendant Lord" );
+echo ul( $relationship_calculator->natures_influencing_ascendant_lord );
 
 echo h5( "Position" );
 echo $relationship_calculator->ascendant_lord, " is in the ",

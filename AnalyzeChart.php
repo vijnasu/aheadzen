@@ -23,6 +23,10 @@ class AnalyzeChart
 	private $_partner_planets;
 	public $ascendant_name;
 	public $ascendant_lord;
+	public $influencing_ascendant;
+	public $influencing_ascendant_lord;
+	public $natures_influencing_ascendant;
+	public $natures_influencing_ascendant_lord;
 	
 	public function __construct($chart)
 	{
@@ -104,6 +108,9 @@ class AnalyzeChart
 						    				$this->_ChartInfo['planet'],
 										$this->ascendant_lord );
 
+		$this->natures_influencing_ascendant = $this->naturesFromPlanets( $this->influencing_ascendant );
+		$this->natures_influencing_ascendant_lord = $this->naturesFromPlanets( $this->influencing_ascendant_lord );
+
 		$this->ascendant_lord_house = $this->ordinal( $this->_ChartInfo['planet'][$this->ascendant_lord]['house'] );
 		$this->ascendant_lord_positional = "TODO: 'So it is a 2-12 relationship which is not good for Ascendant. Indicates minor health issues.'";
 	}
@@ -117,9 +124,21 @@ class AnalyzeChart
 			$target_name = $target;
 			if ( $target == 'ASC')
 			   $target_name = "Ascendant";
-			$influences[] = $name . " " . $detail['aspect_type'] . " " . $target_name;
+			$influences[$name] = $name . " " . $detail['aspect_type'] . " " . $target_name;
 		}
 		return $influences;
+	}
+	private function naturesFromPlanets( $planets ) {
+		$natures = array();
+		foreach ( $planets as $p => $details ) {
+			if ( in_array( $p, AstroData::$GOOD_PLANETS ) )
+			   $natures[] = 'Benefic';
+			else if ( in_array( $p, AstroData::$BAD_PLANETS ) )
+			     $natures[] = 'Malefic';
+		}
+		if ( count( $natures ) == 0)
+		   $natures[] = 'None';
+		return array_unique( $natures );
 	}
 	private function ordinal($n)
 	{ 
