@@ -212,6 +212,81 @@ echo $relationship_calculator->male_seventh_house_lord,
 
 
 
+
+
+
+
+
+
+
+
+
+
+
+echo h4( $female_data['report_name'] );
+
+echo h4( "Ascendant Analysis" );
+
+echo "Ascendant: ", $relationship_calculator->female_ascendant_name, br();
+echo "Ascendant Lord: ", $relationship_calculator->female_ascendant_lord, br(), br();
+
+echo h5("Planets Influencing Ascendant");
+
+echo ul( $relationship_calculator->female_influences['ASC'] );
+
+
+echo h5("Planets Influencing Ascendant Lord- ", $relationship_calculator->female_ascendant_lord);
+
+echo ul( $relationship_calculator->female_influences['ASCL'] );
+
+echo h5( "Natures Influencing Ascendant" );
+echo ul( $relationship_calculator->female_natures_influencing['ASC'] );
+
+echo h5( "Natures Influencing Ascendant Lord" );
+echo ul( $relationship_calculator->female_natures_influencing['ASCL'] );
+
+echo h5( "Ascendant Lord Position" );
+echo $relationship_calculator->female_ascendant_lord, " is in the ",
+     $relationship_calculator->female_houses['ASCL'],
+     " house from the Ascendant. ",
+     $relationship_calculator->female_positionals['ASCL'], br(), br();
+
+
+foreach ( array( 'Moon', 'Sun', 'Venus' ) as $planet )
+	echo h4( $planet, " Analysis" ),
+	     h5( $planet, " Position" ),
+	     $planet, " is in the ",
+     	     $relationship_calculator->female_houses[$planet],
+     	     " house from the Ascendant. ",
+  	     $relationship_calculator->female_positionals[$planet],
+	     h5("Planets Influencing ", $planet),
+	     ul( $relationship_calculator->female_influences[$planet] ),
+	     ul( $relationship_calculator->female_natures_influencing[$planet] );
+
+
+echo h4( "Marriage and Partnership Analysis" );
+
+echo h5( "7th House: ", $relationship_calculator->female_seventh_house );
+echo h5( "7th Lord: ", $relationship_calculator->female_seventh_house_lord );
+
+echo h5( "Planets Influencing 7th House" );
+echo ul( $relationship_calculator->female_influences[7] );
+echo ul( $relationship_calculator->female_natures_influencing[7] );
+
+echo h5( "Planets Influencing 7th Lord- ", $relationship_calculator->female_seventh_house_lord );
+echo ul( $relationship_calculator->female_influences['7L'] );
+echo ul( $relationship_calculator->female_natures_influencing['7L'] );
+
+echo h5( "7th Lord Position" );
+echo $relationship_calculator->female_seventh_house_lord,
+     " is in the ",
+     $relationship_calculator->female_houses['7L'],
+     " house from the 7th. ",
+     $relationship_calculator->female_positionals['7L'], br(), br();
+
+
+
+
 echo "Male Nakshatra: ";
 echo $kuta_calculator->male_nakshatra, br();
 

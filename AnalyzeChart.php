@@ -21,6 +21,7 @@ class AnalyzeChart
 
 	private $_partner_report;
 	private $_partner_planets;
+	private $_partner_houses;
 	public $male_ascendant_name;
 	public $male_ascendant_lord;
 	public $male_seventh_house;
@@ -29,6 +30,14 @@ class AnalyzeChart
 	public $male_natures_influencing;
 	public $male_houses;
 	public $male_positionals;
+	public $female_ascendant_name;
+	public $female_ascendant_lord;
+	public $female_seventh_house;
+	public $female_seventh_house_lord;
+	public $female_influences;
+	public $female_natures_influencing;
+	public $female_houses;
+	public $female_positionals;
 
 	public function __construct($chart)
 	{
@@ -100,6 +109,7 @@ class AnalyzeChart
 	{
 		$this->_partner_report = $partner_report;
 		$this->_partner_planets = $this->_partner_report->getPlanets();
+		$this->_partner_houses = $this->_partner_report->getHouses();
 
 		$this->male_ascendant_name = $this->_ChartInfo['house'][1]['sign'];
 		$this->male_ascendant_lord = AstroData::$ZODIAC_SIGNS_LORD[$this->male_ascendant_name];
@@ -147,6 +157,56 @@ class AnalyzeChart
 					    $this->_ChartInfo['planet'][$this->male_seventh_house_lord]['fulldegree'] );
 		$this->male_houses['7L'] = $this->ordinal( $house_number );
 		$this->male_positionals['7L'] = $this->positionalFromHouseNumber( $house_number );
+
+
+
+
+		$this->female_ascendant_name = $this->_partner_houses[1]['sign'];
+		$this->female_ascendant_lord = AstroData::$ZODIAC_SIGNS_LORD[$this->female_ascendant_name];
+
+		$this->female_influences['ASC'] = $this->calculateInfluences( $this->_partner_houses[1],
+									    $this->_partner_planets, 'ASC' );
+		$this->female_influences['ASCL'] = $this->calculateInfluences( $this->_partner_houses[1],
+						    			     $this->_partner_planets,
+									     $this->female_ascendant_lord );
+
+		$this->female_natures_influencing['ASC'] = $this->naturesFromPlanets( $this->female_influences['ASC'] );
+		$this->female_natures_influencing['ASCL'] = $this->naturesFromPlanets( $this->female_influences['ASCL'] );
+
+		$house_number = $this->calculateHouseFrom(
+					    $this->_partner_houses[1]['fulldegree'],
+					    $this->_partner_planets[$this->female_ascendant_lord]['fulldegree'] );
+		$this->female_houses['ASCL'] = $this->ordinal( $house_number );
+		$this->female_positionals['ASCL'] = $this->positionalFromHouseNumber( $house_number );
+
+		foreach ( array( 'Moon', 'Sun', 'Venus' ) as $planet )
+		{
+			$house_number = $this->calculateHouseFrom(
+				      		    $this->_partner_houses[1]['fulldegree'],
+						    $this->_partner_planets[$planet]['fulldegree'] );
+			$this->female_houses[$planet] = $this->ordinal( $house_number );
+			$this->female_positionals[$planet] = $this->positionalFromHouseNumber( $house_number );
+
+			$this->female_influences[$planet] = $this->calculateInfluences( $this->_partner_houses[1],
+					  			      $this->_partner_planets, $planet );
+			$this->female_natures_influencing[$planet] = $this->naturesFromPlanets( $this->female_influences[$planet] );
+		}
+
+		$this->female_seventh_house = $this->_partner_houses[7]['sign'];
+		$this->female_seventh_house_lord = AstroData::$ZODIAC_SIGNS_LORD[$this->female_seventh_house];
+		$this->female_influences[7] = $this->calculateInfluences( $this->_partner_houses[1],
+								   $this->_partner_planets, 7 );
+		$this->female_influences['7L'] = $this->calculateInfluences( $this->_partner_houses[1],
+					  			      $this->_partner_planets,
+								      $this->female_seventh_house_lord );
+		$this->female_natures_influencing[7] = $this->naturesFromPlanets( $this->female_influences[7] );
+		$this->female_natures_influencing['7L'] = $this->naturesFromPlanets( $this->female_influences['7L'] );
+		$houses = $this->setupHouses( $this->_partner_houses[1]['fulldegree'] );
+		$house_number = $this->calculateHouseFrom(
+					    $houses[7],
+					    $this->_partner_planets[$this->female_seventh_house_lord]['fulldegree'] );
+		$this->female_houses['7L'] = $this->ordinal( $house_number );
+		$this->female_positionals['7L'] = $this->positionalFromHouseNumber( $house_number );
 	}
 	private function calculateInfluences( $ascendant, $planets, $target )
 	{
