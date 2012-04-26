@@ -33,6 +33,14 @@ class AnalyzeChart
 	public $moon_positional;
 	public $influencing_moon;
 	public $natures_influencing_moon;
+	public $sun_house;
+	public $sun_positional;
+	public $influencing_sun;
+	public $natures_influencing_sun;
+	public $venus_house;
+	public $venus_positional;
+	public $influencing_venus;
+	public $natures_influencing_venus;
 	
 	public function __construct($chart)
 	{
@@ -132,6 +140,26 @@ class AnalyzeChart
 		$this->influencing_moon = $this->calculateInfluences( $this->_ChartInfo['house'][1],
 					  			      $this->_ChartInfo['planet'], 'Moon' );
 		$this->natures_influencing_moon = $this->naturesFromPlanets( $this->influencing_moon );
+
+		$house_number = $this->calculateHouseFrom(
+					    $this->_ChartInfo['house'][1]['fulldegree'],
+					    $this->_ChartInfo['planet']['Sun']['fulldegree'] );
+		$this->sun_house = $this->ordinal( $house_number );
+		$this->sun_positional = $this->positionalFromHouseNumber( $house_number );
+
+		$this->influencing_sun = $this->calculateInfluences( $this->_ChartInfo['house'][1],
+					  			      $this->_ChartInfo['planet'], 'Sun' );
+		$this->natures_influencing_sun = $this->naturesFromPlanets( $this->influencing_sun );
+
+		$house_number = $this->calculateHouseFrom(
+					    $this->_ChartInfo['house'][1]['fulldegree'],
+					    $this->_ChartInfo['planet']['Venus']['fulldegree'] );
+		$this->venus_house = $this->ordinal( $house_number );
+		$this->venus_positional = $this->positionalFromHouseNumber( $house_number );
+
+		$this->influencing_venus = $this->calculateInfluences( $this->_ChartInfo['house'][1],
+					  			      $this->_ChartInfo['planet'], 'Venus' );
+		$this->natures_influencing_venus = $this->naturesFromPlanets( $this->influencing_venus );
 	}
 	private function calculateInfluences( $ascendant, $planets, $target )
 	{

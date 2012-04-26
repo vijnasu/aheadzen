@@ -195,6 +195,40 @@ echo ul( $relationship_calculator->natures_influencing_moon );
 
 
 
+echo h4( "Sun Analysis" );
+
+echo h5( "Sun Position" );
+echo "Sun is in the ",
+     $relationship_calculator->sun_house,
+     " house from the Ascendant. ",
+     $relationship_calculator->sun_positional, br(), br();
+
+echo h5("Planets Influencing Sun");
+
+echo ul( $relationship_calculator->influencing_sun );
+
+echo h5( "Natures Influencing Sun" );
+echo ul( $relationship_calculator->natures_influencing_sun );
+
+
+
+echo h4( "Venus Analysis" );
+
+echo h5( "Venus Position" );
+echo "Venus is in the ",
+     $relationship_calculator->venus_house,
+     " house from the Ascendant. ",
+     $relationship_calculator->venus_positional, br(), br();
+
+echo h5("Planets Influencing Venus");
+
+echo ul( $relationship_calculator->influencing_venus );
+
+echo h5( "Natures Influencing Venus" );
+echo ul( $relationship_calculator->natures_influencing_venus );
+
+
+
 
 
 
