@@ -47,7 +47,9 @@ class AnalyzeChart
 	public $influencing_seventh_lord;
 	public $natures_influencing_seventh;
 	public $natures_influencing_seventh_lord;
-	
+	public $seventh_house_lord_house;
+	public $seventh_house_lord_positional;
+
 	public function __construct($chart)
 	{
 		$this->_ChartInput = $chart;
@@ -176,6 +178,12 @@ class AnalyzeChart
 								      $this->seventh_house_lord );
 		$this->natures_influencing_seventh = $this->naturesFromPlanets( $this->influencing_seventh );
 		$this->natures_influencing_seventh_lord = $this->naturesFromPlanets( $this->influencing_seventh_lord );
+		$houses = $this->setupHouses( $this->_ChartInfo['house'][1]['fulldegree'] );
+		$house_number = $this->calculateHouseFrom(
+					    $houses[7],
+					    $this->_ChartInfo['planet'][$this->seventh_house_lord]['fulldegree'] );
+		$this->seventh_house_lord_house = $this->ordinal( $house_number );
+		$this->seventh_house_lord_positional = $this->positionalFromHouseNumber( $house_number );
 	}
 	private function calculateInfluences( $ascendant, $planets, $target )
 	{
@@ -209,9 +217,13 @@ class AnalyzeChart
 	private function calculateHouseFrom( $reference, $target )
 	{
 		$houses = $this->setupHouses( $reference );
-		foreach ( $houses as $house => $degree )
-			if ( $this->deltaDegrees( $target, $degree ) < 15 )
+		foreach ( $houses as $house => $degree ) {
+			$delta = $this->deltaDegrees( $target, $degree );
+			if ( $delta < 15 || $delta > 345 )
+			{
 			   return $house;
+			}
+		}
 		return "House Not Found";
 	}
 	private function ordinal($n)

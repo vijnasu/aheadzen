@@ -240,7 +240,12 @@ echo h5( "Planets Influencing 7th Lord- ", $relationship_calculator->seventh_hou
 echo ul( $relationship_calculator->influencing_seventh_lord );
 echo ul( $relationship_calculator->natures_influencing_seventh_lord );
 
-
+echo h5( "7th Lord Position" );
+echo $relationship_calculator->seventh_house_lord,
+     " is in the ",
+     $relationship_calculator->seventh_house_lord_house,
+     " house from the 7th. ",
+     $relationship_calculator->seventh_house_lord_positional, br(), br();
 
 
 
