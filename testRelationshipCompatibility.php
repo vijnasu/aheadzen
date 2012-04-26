@@ -282,7 +282,10 @@ echo h3( "Interplay of Relationship" ),
      begin_ul();
 foreach ( $relationship_calculator->relative_positionals as $planet => $positional )
 {
-     echo li( $planet, "- house ", $relationship_calculator->relative_houses[$planet], " positional: ", $positional );
+     $positional_text = '';
+     if ( $positional )
+     	$positional_text = ", " . $positional;
+     echo li( $planet, "- house ", $relationship_calculator->relative_houses[$planet], $positional_text );
 }
 echo end_ul();
 

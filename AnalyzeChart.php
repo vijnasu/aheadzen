@@ -227,6 +227,30 @@ class AnalyzeChart
 			$this->relative_positionals[$planet] = $this->positionalFromHouseNumber(
 							    $this->relative_houses[$planet] );
 		}
+
+
+		$this->male_female_influences['Ascendant'] = $this->calculatePartnerInfluences(
+						           $this->_partner_planets,
+						       	   $this->_ChartInfo['house'][1]['fulldegree'],
+						       	   'ASC' );
+
+		$this->female_male_influences['Ascendant'] = $this->calculatePartnerInfluences(
+						       	   $this->_ChartInfo['planet'],
+						       	   $this->_partner_houses[1]['fulldegree'],
+						       	   'ASC' );
+
+		foreach ( array( 'Sun', 'Moon', 'Venus' ) as $planet )
+		{
+			$this->male_female_influences[$planet] = $this->calculatePartnerInfluences(
+							       $this->_partner_planets,
+							       $this->_ChartInfo['planet'][$planet]['fulldegree'],
+							       $planet );
+
+			$this->female_male_influences[$planet] = $this->calculatePartnerInfluences(
+							       $this->_ChartInfo['planet'],
+							       $this->_partner_planets[$planet]['fulldegree'],
+							       $planet );
+	     	}
 	}
 	private function calculateSignPosition( $houses, $sign )
 	{
@@ -237,12 +261,22 @@ class AnalyzeChart
 		}
 		return "Sign not found.";
 	}
+	private function calculatePartnerInfluences( $partner_planets, $target_fulldegree, $target )
+	{
+		$this->referenceFromPartner( $partner_planets, $target_fulldegree, $target );
+		return $this->extractInfluences( $target );
+	}
 	private function calculateInfluences( $ascendant, $planets, $target )
 	{
 		if ( is_int( $target ) )
 		   $this->referenceFromHouse( $planets, $ascendant, $target );
 		else
 		   $this->referenceFrom( $planets, $ascendant );
+
+		return $this->extractInfluences( $target );
+	}		
+	private function extractInfluences( $target )
+	{
 		$influences = array();
 
 		foreach ( $this->_AspectDetails[$target] as $name => $detail )
@@ -297,13 +331,13 @@ class AnalyzeChart
 			     return "2-12";
 			case 3:
 			case 11:
-			     return "None";
+			     return;
 			case 4:
 			case 10:
 			     return "4-10";
 			case 5:
 			case 9:
-			     return "None";
+			     return;
 			case 6:
 			case 8:
 			     return "6-8";
@@ -632,6 +666,49 @@ class AnalyzeChart
 					else if( $aspect_type == AstroData::$ASPECT_NAME[180] )
 						$this->_isCombust[$house] = 1;
 					else $this->_isCombust[$house] = 0;
+				}
+			}
+		}	
+	}
+	private function referenceFromPartner( $planets, $reference, $target )
+	{
+		$houses = $this->setupHouses( $reference );
+
+		$this->_Aspects = array();
+		$all_planets = array_merge( AstroData::$GOOD_PLANETS, AstroData::$BAD_PLANETS, array( 'ASC' ) );
+
+//	Calculate house start fulldegree for a given house.
+		$pointHouseDegree = $this->deltaDegrees( 15, $reference );
+			
+		foreach( $all_planets as $pp )
+		{
+// Find relative house position of two points/planets.
+// Here we are trying to find position of planet $p from house $h
+			$planetInHouse = $this->inHouseRelativeTo( $pointHouseDegree, $planets[$pp]['fulldegree']);
+
+// Reverse Drishti is just another way of finding aspects of planets.
+// For e.g. if Saturn is located in 4th house or 11th house from Moon, it will cast its aspect on Moon.
+			if( in_array($planetInHouse, AstroData::$REVERSE_DRISHTI[$pp] ) )
+			{
+				$houseAspectDegree = (12 - ($planetInHouse - 1)) * 30;
+				if( !isset( $this->_Aspects[$target] ) )
+				{
+					$this->_Aspects[$target] = array();
+					$this->_AspectDetails[$target] = array();
+				}
+
+				$aspect_type = AstroData::$ASPECT_NAME[$houseAspectDegree];
+
+				$this->_Aspects[$target][] = $pp;
+				$this->_AspectDetails[$target][$pp] = array( 'aspect_type' => $aspect_type );
+
+				if( $pp == 'Sun' )
+				{
+					if( $aspect_type == AstroData::$ASPECT_NAME[0] )
+						$this->_isCombust[$target] = -1;
+					else if( $aspect_type == AstroData::$ASPECT_NAME[180] )
+						$this->_isCombust[$target] = 1;
+					else $this->_isCombust[$target] = 0;
 				}
 			}
 		}	
