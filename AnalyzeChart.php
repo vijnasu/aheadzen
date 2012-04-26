@@ -41,6 +41,12 @@ class AnalyzeChart
 	public $venus_positional;
 	public $influencing_venus;
 	public $natures_influencing_venus;
+	public $seventh_house;
+	public $seventh_house_lord;
+	public $influencing_seventh;
+	public $influencing_seventh_lord;
+	public $natures_influencing_seventh;
+	public $natures_influencing_seventh_lord;
 	
 	public function __construct($chart)
 	{
@@ -160,10 +166,23 @@ class AnalyzeChart
 		$this->influencing_venus = $this->calculateInfluences( $this->_ChartInfo['house'][1],
 					  			      $this->_ChartInfo['planet'], 'Venus' );
 		$this->natures_influencing_venus = $this->naturesFromPlanets( $this->influencing_venus );
+
+		$this->seventh_house = $this->_ChartInfo['house'][7]['sign'];
+		$this->seventh_house_lord = AstroData::$ZODIAC_SIGNS_LORD[$this->seventh_house];
+		$this->influencing_seventh = $this->calculateInfluences( $this->_ChartInfo['house'][1],
+					     				 $this->_ChartInfo['planet'], 7 );
+		$this->influencing_seventh_lord = $this->calculateInfluences( $this->_ChartInfo['house'][1],
+					  			      $this->_ChartInfo['planet'],
+								      $this->seventh_house_lord );
+		$this->natures_influencing_seventh = $this->naturesFromPlanets( $this->influencing_seventh );
+		$this->natures_influencing_seventh_lord = $this->naturesFromPlanets( $this->influencing_seventh_lord );
 	}
 	private function calculateInfluences( $ascendant, $planets, $target )
 	{
-		$this->referenceFrom( $planets, $ascendant );
+		if ( is_int( $target ) )
+		   $this->referenceFromHouse( $planets, $ascendant, $target );
+		else
+		   $this->referenceFrom( $planets, $ascendant );
 		$influences = array();
 
 		foreach ( $this->_AspectDetails[$target] as $name => $detail )
@@ -505,6 +524,53 @@ class AnalyzeChart
 
 
 	
+	}
+	private function referenceFromHouse( $planets, $asc, $house )
+	{
+		$planets['ASC'] = $asc;
+
+		$houses = $this->setupHouses( $asc['fulldegree'] );
+
+		$this->_Aspects = array();
+		$all_planets = array_merge( AstroData::$GOOD_PLANETS, AstroData::$BAD_PLANETS, array( 'ASC' ) );
+
+		$reference = $houses[$house];
+
+//	Calculate house start fulldegree for a given house.
+		$pointHouseDegree = $this->deltaDegrees( 15, $reference );
+			
+		foreach( $all_planets as $pp )
+		{
+// Find relative house position of two points/planets.
+// Here we are trying to find position of planet $p from house $h
+			$planetInHouse = $this->inHouseRelativeTo( $pointHouseDegree, $planets[$pp]['fulldegree']);
+
+// Reverse Drishti is just another way of finding aspects of planets.
+// For e.g. if Saturn is located in 4th house or 11th house from Moon, it will cast its aspect on Moon.
+			if( in_array($planetInHouse, AstroData::$REVERSE_DRISHTI[$pp] ) )
+			{
+				$houseAspectDegree = (12 - ($planetInHouse - 1)) * 30;
+				if( !isset( $this->_Aspects[$house] ) )
+				{
+					$this->_Aspects[$house] = array();
+					$this->_AspectDetails[$house] = array();
+				}
+
+				$aspect_type = AstroData::$ASPECT_NAME[$houseAspectDegree];
+
+				$this->_Aspects[$house][] = $pp;
+				$this->_AspectDetails[$house][$pp] = array( 'aspect_type' => $aspect_type );
+
+				if( $pp == 'Sun' )
+				{
+					if( $aspect_type == AstroData::$ASPECT_NAME[0] )
+						$this->_isCombust[$house] = -1;
+					else if( $aspect_type == AstroData::$ASPECT_NAME[180] )
+						$this->_isCombust[$house] = 1;
+					else $this->_isCombust[$house] = 0;
+				}
+			}
+		}	
 	}
 	private function setupHouses( $reference )
 	{

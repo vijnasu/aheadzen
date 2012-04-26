@@ -227,7 +227,18 @@ echo ul( $relationship_calculator->influencing_venus );
 echo h5( "Natures Influencing Venus" );
 echo ul( $relationship_calculator->natures_influencing_venus );
 
+echo h4( "Marriage and Partnership Analysis" );
 
+echo h5( "7th House: ", $relationship_calculator->seventh_house );
+echo h5( "7th Lord: ", $relationship_calculator->seventh_house_lord );
+
+echo h5( "Planets Influencing 7th House" );
+echo ul( $relationship_calculator->influencing_seventh );
+echo ul( $relationship_calculator->natures_influencing_seventh );
+
+echo h5( "Planets Influencing 7th Lord- ", $relationship_calculator->seventh_house_lord );
+echo ul( $relationship_calculator->influencing_seventh_lord );
+echo ul( $relationship_calculator->natures_influencing_seventh_lord );
 
 
 
