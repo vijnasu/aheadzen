@@ -279,7 +279,12 @@ echo $relationship_calculator->female_seventh_house_lord,
 
 echo h3( "Interplay of Relationship" ),
      h4( "Relative House Position of each other's Ascendant, Sun, Moon and Venus." ),
-     ul( $relationship_calculator->relative_influences );
+     begin_ul();
+foreach ( $relationship_calculator->relative_positionals as $planet => $positional )
+{
+     echo li( $planet, "- house ", $relationship_calculator->relative_houses[$planet], " positional: ", $positional );
+}
+echo end_ul();
 
 echo h4( "Deeper Synastry Analysis of each other's Ascendant, Sun, Moon and Venus." ),
      h5( "Influences to ", $female_data['report_name'], "'s Planets in ", $male_data['report_name'], "'s chart." );

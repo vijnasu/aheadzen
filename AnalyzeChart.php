@@ -38,7 +38,8 @@ class AnalyzeChart
 	public $female_natures_influencing;
 	public $female_houses;
 	public $female_positionals;
-	public $relative_influences;
+	public $relative_positionals;
+	public $relative_houses;
 	public $female_male_influences;
 	public $male_female_influences;
 
@@ -211,8 +212,30 @@ class AnalyzeChart
 		$this->female_houses['7L'] = $this->ordinal( $house_number );
 		$this->female_positionals['7L'] = $this->positionalFromHouseNumber( $house_number );
 
+		$this->relative_houses['Ascendant'] = $this->calculateHouseFrom(
+			      			    $this->_ChartInfo['house'][1]['fulldegree'],
+			      			    $this->calculateSignPosition($this->_partner_houses,
+							$this->_ChartInfo['house'][1]['sign'] ) );
+		$this->relative_positionals['Ascendant'] = $this->positionalFromHouseNumber(
+							$this->relative_houses['Ascendant'] );
 
-//		$this->relative_influences = 
+		foreach ( array( 'Moon', 'Sun', 'Venus' ) as $planet )
+		{
+			$this->relative_houses[$planet] = $this->calculateHouseFrom(
+							$this->_ChartInfo['planet'][$planet]['fulldegree'],
+				      			$this->_partner_planets[$planet]['fulldegree'] );
+			$this->relative_positionals[$planet] = $this->positionalFromHouseNumber(
+							    $this->relative_houses[$planet] );
+		}
+	}
+	private function calculateSignPosition( $houses, $sign )
+	{
+		foreach ( range( 1, 12 ) as $h )
+		{
+			if ( $houses[$h]['sign'] == $sign )
+			   return $h;
+		}
+		return "Sign not found.";
 	}
 	private function calculateInfluences( $ascendant, $planets, $target )
 	{
@@ -274,13 +297,13 @@ class AnalyzeChart
 			     return "2-12";
 			case 3:
 			case 11:
-			     return;
+			     return "None";
 			case 4:
 			case 10:
 			     return "4-10";
 			case 5:
 			case 9:
-			     return;
+			     return "None";
 			case 6:
 			case 8:
 			     return "6-8";
