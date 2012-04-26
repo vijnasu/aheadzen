@@ -167,11 +167,11 @@ echo ul( $relationship_calculator->natures_influencing_ascendant );
 echo h5( "Natures Influencing Ascendant Lord" );
 echo ul( $relationship_calculator->natures_influencing_ascendant_lord );
 
-echo h5( "Position" );
+echo h5( "Ascendant Lord Position" );
 echo $relationship_calculator->ascendant_lord, " is in the ",
      $relationship_calculator->ascendant_lord_house,
      " house from the Ascendant. ",
-     $relationship_calculator->ascendant_lord_positional, br();
+     $relationship_calculator->ascendant_lord_positional, br(), br();
 
 
 

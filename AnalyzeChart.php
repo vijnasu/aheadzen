@@ -27,6 +27,8 @@ class AnalyzeChart
 	public $influencing_ascendant_lord;
 	public $natures_influencing_ascendant;
 	public $natures_influencing_ascendant_lord;
+	public $ascendant_lord_house;
+	public $ascendant_lord_positional;
 	
 	public function __construct($chart)
 	{
@@ -111,8 +113,11 @@ class AnalyzeChart
 		$this->natures_influencing_ascendant = $this->naturesFromPlanets( $this->influencing_ascendant );
 		$this->natures_influencing_ascendant_lord = $this->naturesFromPlanets( $this->influencing_ascendant_lord );
 
-		$this->ascendant_lord_house = $this->ordinal( $this->_ChartInfo['planet'][$this->ascendant_lord]['house'] );
-		$this->ascendant_lord_positional = "TODO: 'So it is a 2-12 relationship which is not good for Ascendant. Indicates minor health issues.'";
+		$house_number = $this->calculateHouseFrom(
+					    $this->_ChartInfo['house'][1]['fulldegree'],
+					    $this->_ChartInfo['planet'][$this->ascendant_lord]['fulldegree'] );
+		$this->ascendant_lord_house = $this->ordinal( $house_number );
+		$this->ascendant_lord_positional = $this->positionalFromHouseNumber( $house_number );
 	}
 	private function calculateInfluences( $ascendant, $planets, $target )
 	{
@@ -140,6 +145,14 @@ class AnalyzeChart
 		   $natures[] = 'None';
 		return array_unique( $natures );
 	}
+	private function calculateHouseFrom( $reference, $target )
+	{
+		$houses = $this->setupHouses( $reference );
+		foreach ( $houses as $house => $degree )
+			if ( $this->deltaDegrees( $target, $degree ) < 15 )
+			   return $house;
+		return "House Not Found";
+	}
 	private function ordinal($n)
 	{ 
 		$test_c = abs($n) % 10;
@@ -147,7 +160,32 @@ class AnalyzeChart
             	     : (($test_c < 4) ? ($test_c < 3) ? ($test_c < 2) ? ($test_c < 1)
             	     ? 'th' : 'st' : 'nd' : 'rd' : 'th'));
     		return $n.$ext;
-	}  
+	}
+	private function positionalFromHouseNumber( $number )
+	{
+		switch ( $number )
+		{
+			case 1:
+			     return "1-1";
+			case 2:
+			case 12:
+			     return "2-12";
+			case 3:
+			case 11:
+			     return;
+			case 4:
+			case 10:
+			     return "4-10";
+			case 5:
+			case 9:
+			     return;
+			case 6:
+			case 8:
+			     return "6-8";
+			case 7:
+			     return "7-7";
+		}
+	}
 	private function getAspectScore( $planet )
 	{
 		$total = 0;
