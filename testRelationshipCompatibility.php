@@ -148,7 +148,10 @@ $relationship_calculator->prepareRelationshipReport( $female_report );
 echo h2($male_data['report_name'], ' and ', $female_data['report_name']);
 echo h3("Analyzing Capacity to Love");
 
-echo h4($male_data['report_name']);
+echo h4( $male_data['report_name'] );
+
+echo h4( "Ascendant Analysis" );
+
 echo "Ascendant: ", $relationship_calculator->ascendant_name, br();
 echo "Ascendant Lord: ", $relationship_calculator->ascendant_lord, br(), br();
 
@@ -172,6 +175,24 @@ echo $relationship_calculator->ascendant_lord, " is in the ",
      $relationship_calculator->ascendant_lord_house,
      " house from the Ascendant. ",
      $relationship_calculator->ascendant_lord_positional, br(), br();
+
+
+
+echo h4( "Moon Analysis" );
+
+echo h5( "Moon Position" );
+echo "Moon is in the ",
+     $relationship_calculator->moon_house,
+     " house from the Ascendant. ",
+     $relationship_calculator->moon_positional, br(), br();
+
+echo h5("Planets Influencing Moon");
+
+echo ul( $relationship_calculator->influencing_moon );
+
+echo h5( "Natures Influencing Moon" );
+echo ul( $relationship_calculator->natures_influencing_moon );
+
 
 
 

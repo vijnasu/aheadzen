@@ -29,6 +29,10 @@ class AnalyzeChart
 	public $natures_influencing_ascendant_lord;
 	public $ascendant_lord_house;
 	public $ascendant_lord_positional;
+	public $moon_house;
+	public $moon_positional;
+	public $influencing_moon;
+	public $natures_influencing_moon;
 	
 	public function __construct($chart)
 	{
@@ -118,6 +122,16 @@ class AnalyzeChart
 					    $this->_ChartInfo['planet'][$this->ascendant_lord]['fulldegree'] );
 		$this->ascendant_lord_house = $this->ordinal( $house_number );
 		$this->ascendant_lord_positional = $this->positionalFromHouseNumber( $house_number );
+
+		$house_number = $this->calculateHouseFrom(
+					    $this->_ChartInfo['house'][1]['fulldegree'],
+					    $this->_ChartInfo['planet']['Moon']['fulldegree'] );
+		$this->moon_house = $this->ordinal( $house_number );
+		$this->moon_positional = $this->positionalFromHouseNumber( $house_number );
+
+		$this->influencing_moon = $this->calculateInfluences( $this->_ChartInfo['house'][1],
+					  			      $this->_ChartInfo['planet'], 'Moon' );
+		$this->natures_influencing_moon = $this->naturesFromPlanets( $this->influencing_moon );
 	}
 	private function calculateInfluences( $ascendant, $planets, $target )
 	{
