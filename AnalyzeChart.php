@@ -21,14 +21,14 @@ class AnalyzeChart
 
 	private $_partner_report;
 	private $_partner_planets;
-	public $ascendant_name;
-	public $ascendant_lord;
-	public $seventh_house;
-	public $seventh_house_lord;
-	public $influences;
-	public $natures_influencing;
-	public $houses;
-	public $positionals;
+	public $male_ascendant_name;
+	public $male_ascendant_lord;
+	public $male_seventh_house;
+	public $male_seventh_house_lord;
+	public $male_influences;
+	public $male_natures_influencing;
+	public $male_houses;
+	public $male_positionals;
 
 	public function __construct($chart)
 	{
@@ -101,52 +101,52 @@ class AnalyzeChart
 		$this->_partner_report = $partner_report;
 		$this->_partner_planets = $this->_partner_report->getPlanets();
 
-		$this->ascendant_name = $this->_ChartInfo['house'][1]['sign'];
-		$this->ascendant_lord = AstroData::$ZODIAC_SIGNS_LORD[$this->ascendant_name];
+		$this->male_ascendant_name = $this->_ChartInfo['house'][1]['sign'];
+		$this->male_ascendant_lord = AstroData::$ZODIAC_SIGNS_LORD[$this->male_ascendant_name];
 
-		$this->influences['ASC'] = $this->calculateInfluences( $this->_ChartInfo['house'][1],
-									   $this->_ChartInfo['planet'], 'ASC' );
-		$this->influences['ASCL'] = $this->calculateInfluences( $this->_ChartInfo['house'][1],
-						    				$this->_ChartInfo['planet'],
-										$this->ascendant_lord );
+		$this->male_influences['ASC'] = $this->calculateInfluences( $this->_ChartInfo['house'][1],
+									    $this->_ChartInfo['planet'], 'ASC' );
+		$this->male_influences['ASCL'] = $this->calculateInfluences( $this->_ChartInfo['house'][1],
+						    			     $this->_ChartInfo['planet'],
+									     $this->male_ascendant_lord );
 
-		$this->natures_influencing['ASC'] = $this->naturesFromPlanets( $this->influences['ASC'] );
-		$this->natures_influencing['ASCL'] = $this->naturesFromPlanets( $this->influences['ASCL'] );
+		$this->male_natures_influencing['ASC'] = $this->naturesFromPlanets( $this->male_influences['ASC'] );
+		$this->male_natures_influencing['ASCL'] = $this->naturesFromPlanets( $this->male_influences['ASCL'] );
 
 		$house_number = $this->calculateHouseFrom(
 					    $this->_ChartInfo['house'][1]['fulldegree'],
-					    $this->_ChartInfo['planet'][$this->ascendant_lord]['fulldegree'] );
-		$this->houses['ASCL'] = $this->ordinal( $house_number );
-		$this->positionals['ASCL'] = $this->positionalFromHouseNumber( $house_number );
+					    $this->_ChartInfo['planet'][$this->male_ascendant_lord]['fulldegree'] );
+		$this->male_houses['ASCL'] = $this->ordinal( $house_number );
+		$this->male_positionals['ASCL'] = $this->positionalFromHouseNumber( $house_number );
 
 		foreach ( array( 'Moon', 'Sun', 'Venus' ) as $planet )
 		{
 			$house_number = $this->calculateHouseFrom(
 				      		    $this->_ChartInfo['house'][1]['fulldegree'],
 						    $this->_ChartInfo['planet'][$planet]['fulldegree'] );
-			$this->houses[$planet] = $this->ordinal( $house_number );
-			$this->positionals[$planet] = $this->positionalFromHouseNumber( $house_number );
+			$this->male_houses[$planet] = $this->ordinal( $house_number );
+			$this->male_positionals[$planet] = $this->positionalFromHouseNumber( $house_number );
 
-			$this->influences[$planet] = $this->calculateInfluences( $this->_ChartInfo['house'][1],
+			$this->male_influences[$planet] = $this->calculateInfluences( $this->_ChartInfo['house'][1],
 					  			      $this->_ChartInfo['planet'], $planet );
-			$this->natures_influencing[$planet] = $this->naturesFromPlanets( $this->influences[$planet] );
+			$this->male_natures_influencing[$planet] = $this->naturesFromPlanets( $this->male_influences[$planet] );
 		}
 
-		$this->seventh_house = $this->_ChartInfo['house'][7]['sign'];
-		$this->seventh_house_lord = AstroData::$ZODIAC_SIGNS_LORD[$this->seventh_house];
-		$this->influences[7] = $this->calculateInfluences( $this->_ChartInfo['house'][1],
+		$this->male_seventh_house = $this->_ChartInfo['house'][7]['sign'];
+		$this->male_seventh_house_lord = AstroData::$ZODIAC_SIGNS_LORD[$this->male_seventh_house];
+		$this->male_influences[7] = $this->calculateInfluences( $this->_ChartInfo['house'][1],
 								   $this->_ChartInfo['planet'], 7 );
-		$this->influences['7L'] = $this->calculateInfluences( $this->_ChartInfo['house'][1],
+		$this->male_influences['7L'] = $this->calculateInfluences( $this->_ChartInfo['house'][1],
 					  			      $this->_ChartInfo['planet'],
-								      $this->seventh_house_lord );
-		$this->natures_influencing[7] = $this->naturesFromPlanets( $this->influences[7] );
-		$this->natures_influencing['7L'] = $this->naturesFromPlanets( $this->influences['7L'] );
+								      $this->male_seventh_house_lord );
+		$this->male_natures_influencing[7] = $this->naturesFromPlanets( $this->male_influences[7] );
+		$this->male_natures_influencing['7L'] = $this->naturesFromPlanets( $this->male_influences['7L'] );
 		$houses = $this->setupHouses( $this->_ChartInfo['house'][1]['fulldegree'] );
 		$house_number = $this->calculateHouseFrom(
 					    $houses[7],
-					    $this->_ChartInfo['planet'][$this->seventh_house_lord]['fulldegree'] );
-		$this->houses['7L'] = $this->ordinal( $house_number );
-		$this->positionals['7L'] = $this->positionalFromHouseNumber( $house_number );
+					    $this->_ChartInfo['planet'][$this->male_seventh_house_lord]['fulldegree'] );
+		$this->male_houses['7L'] = $this->ordinal( $house_number );
+		$this->male_positionals['7L'] = $this->positionalFromHouseNumber( $house_number );
 	}
 	private function calculateInfluences( $ascendant, $planets, $target )
 	{
