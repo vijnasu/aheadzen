@@ -213,16 +213,6 @@ echo $relationship_calculator->male_seventh_house_lord,
 
 
 
-
-
-
-
-
-
-
-
-
-
 echo h4( $female_data['report_name'] );
 
 echo h4( "Ascendant Analysis" );
@@ -282,10 +272,34 @@ echo $relationship_calculator->female_seventh_house_lord,
      " is in the ",
      $relationship_calculator->female_houses['7L'],
      " house from the 7th. ",
-     $relationship_calculator->female_positionals['7L'], br(), br();
+     $relationship_calculator->female_positionals['7L'];
 
 
 
+
+echo h3( "Interplay of Relationship" ),
+     h4( "Relative House Position of each other's Ascendant, Sun, Moon and Venus." );
+
+
+
+
+echo h4( "Deeper Synastry Analysis of each other's Ascendant, Sun, Moon and Venus." ),
+     h5( "Influences to ", $female_data['report_name'], "'s Planets in ", $male_data['report_name'], "'s chart." );
+
+foreach ( array( 'Ascendant', 'Sun', 'Moon', 'Venus' ) as $planet )
+{
+	echo h5( $planet );
+}
+
+echo h5( "Influences to ", $male_data['report_name'], "'s Planets in ", $female_data['report_name'], "'s chart." );
+
+
+foreach ( array( 'Ascendant', 'Sun', 'Moon', 'Venus' ) as $planet )
+{
+	echo h5( $planet );
+}
+
+echo h4( "Marriage Compatibility Based on Indian Astrology" );
 
 echo "Male Nakshatra: ";
 echo $kuta_calculator->male_nakshatra, br();
