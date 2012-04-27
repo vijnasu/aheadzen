@@ -7,6 +7,7 @@ require_once 'astroreport.php';
 require_once 'AstroData.php';
 require_once 'AnalyzeChart.php';
 require_once 'AnalyzeKutas.php';
+require_once 'DisplayHelper.php';
 
 $birth_data = array();
 
@@ -83,57 +84,6 @@ if ($birth_data[0]['sex'] == 'male' && $birth_data[1]['sex'] == 'female') {
 } else {
   echo "Error: can not find male and female data";
 }
-
-function br()
-{
-	return "<br />";
-}
-
-function h5()
-{
-	return "<h5>" . implode(func_get_args()) . "</h5>";
-}
-
-function h4()
-{
-	return "<h4>" . implode(func_get_args()) . "</h4>";
-}
-
-function h3()
-{
-	return "<h3>" . implode(func_get_args()) . "</h3>";
-}
-
-function h2()
-{
-	return "<h2>" . implode(func_get_args()) . "</h2>";
-}
-
-function begin_ul()
-{
-	return "<ul>";
-}
-
-function end_ul()
-{
-	return "</ul>";
-}
-
-function li()
-{
-	return "<li>" . implode( func_get_args() ) . "</li>";
-}
-
-function ul( $array )
-{
-	$string = begin_ul();
-	foreach ( $array as $item )
-	{
-		$string.= li( $item );
-	}
-	return $string . end_ul();
-}
-
 
 $male_report = new AstroReport($male_data); 
 
