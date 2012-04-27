@@ -41,7 +41,7 @@ class AstroData
 										210 => "aspects",
 										360 => "conjunct"
 										);
-	public static $REVERSE_DRISHTI = array("Sun" => array(1,7),"Moon" => array(1,7),"Mercury" => array(1,7),"Venus" => array(1,7),"Saturn" => array(1,4,7,11),"Mars" => array(1,6,7,10),"Rahu"=>array(1),"Ketu"=>array(1),"Jupiter"=>array(1,5,7,9));
+	public static $REVERSE_DRISHTI = array("Sun" => array(1,7),"Moon" => array(1,7),"Mercury" => array(1,7),"Venus" => array(1,7),"Saturn" => array(1,4,7,11),"Mars" => array(1,6,7,10),"Rahu"=>array(1),"Ketu"=>array(1),"Jupiter"=>array(1,5,7,9),"ASC"=>array());
 	public static $LAGNA_GOOD_BAD = array(
 										'Aries' => array(
 															'GOOD' => array( 'Mars', 'Sun', 'Jupiter', 'Moon' ),
