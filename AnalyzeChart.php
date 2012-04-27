@@ -212,10 +212,8 @@ class AnalyzeChart
 		$this->female_houses['7L'] = $this->ordinal( $house_number );
 		$this->female_positionals['7L'] = $this->positionalFromHouseNumber( $house_number );
 
-		$this->relative_houses['Ascendant'] = $this->calculateHouseFrom(
-			      			    $this->_ChartInfo['house'][1]['fulldegree'],
-			      			    $this->calculateSignPosition($this->_partner_houses,
-							$this->_ChartInfo['house'][1]['sign'] ) );
+		$this->relative_houses['Ascendant'] = $this->calculateSignPosition($this->_partner_houses,
+						    $this->_ChartInfo['house'][1]['sign'] );
 		$this->relative_positionals['Ascendant'] = $this->positionalFromHouseNumber(
 							$this->relative_houses['Ascendant'] );
 
