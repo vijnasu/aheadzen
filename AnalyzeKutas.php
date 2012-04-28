@@ -114,8 +114,12 @@ class AnalyzeKutas
 		       	    return "Vata";
 		}
 	}
+
+	//TODO: Add exception that moon sign lords are in 7th house from each other, then award full points
 	private function calculateRashiKutaScore()
 	{
+					$house_check = $this->inHouseRelativeTo( $this->_female_planets['Moon']['fulldegree'], $this->_male_planets['Moon']['fulldegree'] );
+
 		if ($this->male_moon_sign_lord == $this->female_moon_sign_lord ||
 		   $this->planetaryFriends($this->male_moon_sign_lord, $this->female_moon_sign_lord))
 		{
@@ -123,13 +127,14 @@ class AnalyzeKutas
 		}
 		else
 		{
-			$diff = abs( $this->_male_planets['Moon']['fulldegree'] -
+			$diff = $this->deltaDegrees( $this->_female_planets['Moon']['fulldegree'], $this->_male_planets['Moon']['fulldegree'] );
+		/*	$diff = abs( $this->_male_planets['Moon']['fulldegree'] -
 			      	     $this->_female_planets['Moon']['fulldegree'] );
 			if ( $diff > 180 )
 			{
 				$diff = 360 - $diff;
-			}
-			if ( $diff > 165 )
+			}*/
+			if ( $diff > 165 && !in_array( $house_check, array( 6, 8, 12 )  ) )
 		  	{
 				$this->rashiKutaScore = 7;
 			}
@@ -354,4 +359,28 @@ class AnalyzeKutas
 		$this->male_nakshatra = AstroData::$NAKSHATRA[$this->_male_nakshatra_index];
 		$this->female_nakshatra = AstroData::$NAKSHATRA[$this->_female_nakshatra_index];
 	}
+	
+	private function deltaDegrees( $ref, $transitPoint )
+	{
+		$deltaDegrees = $transitPoint - $ref;
+		$deltaDegrees = $this->modDegree($deltaDegrees);
+		return $deltaDegrees;
+	}
+
+	private function modDegree($degree)
+	{
+		if( $degree < 0 )
+		{
+			$degree += 360;
+		}
+		return $degree;
+	}
+	private function inHouseRelativeTo( $ref, $transitPoint )
+	{
+		$deltaDegrees = $this->deltaDegrees( $ref, $transitPoint );
+		$deltaHouse = (int)($deltaDegrees/30);
+		$deltaHouse += 1;
+		return $deltaHouse;
+	}
+
 }?>
