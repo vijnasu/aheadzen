@@ -122,7 +122,7 @@ class VimshottariDasha
 
 	private function getEndDate($period, $startTS, $level = 1)
 	{
-		list($month, $numday, $year, $hour, $minute, $second) = split('[/.-]', date("m.d.Y.G.i.s", $startTS));
+		list($month, $numday, $year, $hour, $minute, $second) = explode('.', date("m.d.Y.G.i.s", $startTS));
 
 		if( $level <= 2 )
 		{
