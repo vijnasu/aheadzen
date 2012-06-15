@@ -7,7 +7,7 @@ require_once 'astroreport.php';
 require_once 'AstroData.php';
 require_once 'AnalyzeChart.php';
 require_once 'AnalyzeLongevity.php';
-
+error_reporting(0);
 $birth_data = array('timezone' =>
 		    array (
 			   'hours' => 5,
@@ -29,8 +29,8 @@ $birth_data = array('timezone' =>
 		    'month' => 7,
 		    'day' => 7,
 		    'year' => 1986,
-		    'hour' => 10,
-		    'min' => 7,
+		    'hour' => 8,
+		    'min' => 53,
 		    'report_name' => 'AT',
 		    'city' => 'Jaipur',
 		    'country' => 'IN',
@@ -41,6 +41,6 @@ $birth_data = array('timezone' =>
 
 $calculator = new AnalyzeLongevity($birth_data);
 $years = $calculator->calculateDifficultPeriods();
-print_r($years);
+var_dump($years);
 
 ?>
