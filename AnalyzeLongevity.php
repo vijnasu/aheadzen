@@ -1,6 +1,8 @@
 <?php
 // Business tier class that analyzes a birth chart for Longevity
 
+require_once 'ashtakvarg.php';
+
 class AnalyzeLongevity {
   private $_birth_data;
   private $_chart;
@@ -27,10 +29,20 @@ class AnalyzeLongevity {
     if (substr($start_day_number, -1) != 0) {
       $start_day_number = substr_replace($start_day_number + 10, 0, -1);
     }
+
+    // Calculate Ashtakvarga
+    $av = new AshtakVarg($birth_planets, $birth_houses['ASC']['sign_number']);
+    $av_houses = $av->getHouseRating($birth_houses);
+    $tough_av_houses = array();
+    for ($i = 1; $i <= 12; $i++)
+      if ($av_houses[$i]['Points'][0] < 25)
+	$tough_av_houses[$i] = $av_houses[$i]['Points'][0];
+
     // Calculate transits    
     foreach (range($first_year, $first_year + 70) as $y) {
       $years[$y] = array();
       $years[$y]['transit'] = array();
+      $years[$y]['Ashtakvarga'] = array();
       $start = 0;
       // skip dates before birth
       if ($y == $first_year && $start < $start_day_number) {
@@ -49,12 +61,21 @@ class AnalyzeLongevity {
 	  $current_asc_house = $this->inHouseRelativeTo($birth_asc, $current_planet);
 	  $current_sun_house = $this->inHouseRelativeTo($birth_sun, $current_planet);
 	  $current_moon_house = $this->inHouseRelativeTo($birth_moon, $current_planet);
+	  // Check Ashtakvarga for Saturn and Jupiter
+	  if (($sm == 'Saturn' || $sm == 'Jupiter') &&
+	      array_key_exists($current_asc_house, $tough_av_houses)) {
+	    $current_asc_av_transit = $sm . " transits " .
+	      $this->ordinal_suffix($current_asc_house) . " house, which has " .
+	      $tough_av_houses[$current_asc_house] . " points.";
+	    if (!in_array($current_asc_av_transit, $years[$y]['Ashtakvarga']))
+	      $years[$y]['Ashtakvarga'][] = $current_asc_av_transit;
+	  }
 	  $current_asc_transit = $sm . " transits " .
-	    $this->ordinal_suffix($current_asc_house) . " house from ASC";
+	    $this->ordinal_suffix($current_asc_house) . " house from ASC.";
 	  $current_sun_transit = $sm . " transits " .
-	    $this->ordinal_suffix($current_sun_house) . " house from Sun";
+	    $this->ordinal_suffix($current_sun_house) . " house from Sun.";
 	  $current_moon_transit = $sm . " transits " .
-	    $this->ordinal_suffix($current_moon_house) . " house from Moon";
+	    $this->ordinal_suffix($current_moon_house) . " house from Moon.";
 	  if (!in_array($current_asc_transit, $years[$y]['transit']) && in_array($current_asc_house, $difficult_houses)) {
 	    $years[$y]['transit'][] = $current_asc_transit;
 	  }
