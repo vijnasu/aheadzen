@@ -58,6 +58,7 @@ class AnalyzeLongevity {
     foreach (range($first_year, $first_year + 70) as $y) {
       $years[$y] = array();
       $years[$y]['kota_stambha_transit'] = array();
+      $years[$y]['kota_entrance_exit_transit'] = array();
       $years[$y]['transit'] = array();
       $years[$y]['Ashtakvarga'] = array();
       $start = 0;
@@ -79,8 +80,16 @@ class AnalyzeLongevity {
 	  $current_planet = $current_planets[$mal]['fulldegree'];
 	  $current_nakshatra = $this->_nakshatra28FromDegree($current_planet);
 	  $current_ks_transit = $mal . " transits Kota Stambha.";
-	  if (!in_array($current_ks_transit, $years[$y]['kota_stambha_transit']) && in_array($current_nakshatra, $kota_stambha)) {
+	  if (!in_array($current_ks_transit, $years[$y]['kota_stambha_transit']) &&
+	      in_array($current_nakshatra, $kota_stambha)) {
 	    $years[$y]['kota_stambha_transit'][] = $current_ks_transit;
+	  }
+	  // TODO: handle retrograde
+	  $current_ee_transit = $mal . " transits a Kota entrance while a benefic transits an exit.";
+	  if (!in_array($current_ee_transit, $years[$y]['kota_entrance_exit_transit']) &&
+	      in_array($current_nakshatra, $kota_entrances) &&
+	      $this->_beneficTransitsExit($current_planets, $kota_exits)) {
+	    $years[$y]['kota_entrance_exit_transit'][] = $current_ee_transit;
 	  }
 	}
 
@@ -139,7 +148,16 @@ class AnalyzeLongevity {
       $index += 1;
     }
     return $index;
-}
+  }
+
+  private function _beneficTransitsExit($current_planets, $exits) {
+    foreach (AstroData::$GOOD_PLANETS as $ben) {
+      $nakshatra = $this->_nakshatra28FromDegree($current_planets[$ben]['fulldegree']);
+      if (in_array($nakshatra, $exits))
+	return true;
+    }
+    return false;
+  }
 
   private function _dateFromDayOfYear($day, $year) {
     return DateTime::createFromFormat('z-Y', $day . '-' . $year);
