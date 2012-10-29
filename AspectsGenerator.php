@@ -23,9 +23,11 @@
 	private $_aspect_types = array();
 	private $_aspect_min_orb = array();
 	private $_birth_planets;
+	private $_birth_houses;
 	private $_start_planets;
+	private $_include_houses;
 
-	public function __construct($birth_data)
+	public function __construct($birth_data, $include_houses = false)
 		{
 
 			$this->_birth_data = $birth_data;		
@@ -39,6 +41,7 @@
 								90 => "square",
 								120 => "trine"
 								);
+			$this->_include_houses = $include_houses;
 
 		}
 
@@ -50,7 +53,6 @@
 
 			$aspect_degree = $aspect;
 			$date = date(AspectsGenerator::DATE_FORMAT,$time);
-
 			foreach($this->_birth_planets as $birth_planet => $planet_data)
 			{
 
@@ -106,7 +108,68 @@
 				
 			}
 
-			//var_dump($res);
+//House Aspects
+
+			if ( $this->_include_houses )
+			{
+				foreach($this->_birth_houses as $house => $house_data)
+				{
+
+					if( in_array( $house, array( "MC", "ASC", 1 ) ) )
+						continue;
+
+					//print "\nsearching.....";
+
+					$temp = $house_data[AspectsGenerator::DEGREE_STRING];
+					$degree = $house_data[AspectsGenerator::DEGREE_STRING];
+					$degree1 = $time_planets[$planet][AspectsGenerator::DEGREE_STRING];
+					$degree_diff = $degree - $degree1; 
+
+					if($degree_diff < -1)
+						$degree_diff += 360;
+
+					$aspect_info = $planet.":".$house.":".$aspect_degree;
+		
+					if(abs($degree_diff-$aspect_degree) < (1) )
+					{
+														
+						$orb = 	$degree_diff-$aspect_degree;
+
+						if(array_key_exists($aspect_info,$this->_aspect_min_orb))
+						{	
+							if(abs($orb) < $this->_aspect_min_orb[$aspect_info][0])
+							{
+								$this->_aspect_min_orb[$aspect_info] = array(abs($orb),$time);
+							}
+						}
+						else
+						{	
+							$this->_aspect_min_orb[$aspect_info] = array(abs($orb),$time);
+						}
+							
+					}
+					elseif(array_key_exists($aspect_info,$this->_aspect_min_orb))
+					{
+						$aspect_time = $this->_aspect_min_orb[$aspect_info][1];
+						$aspect_date = date(AspectsGenerator::DATE_FORMAT,$aspect_time);
+						
+						if(array_key_exists($aspect_date,$res))
+						{
+							$count = count($res[$aspect_date]);
+							$res[$aspect_date][$count]  = array($planet,$house,$aspect_degree);
+						}
+						else
+						{
+							$res[$aspect_date][0] = array($planet,$house,$aspect_degree);
+						}
+
+						unset($this->_aspect_min_orb[$aspect_info]);
+					}
+					
+				}
+			}
+
+//			var_dump($res);
 			return $res;
 		}
 
@@ -201,6 +264,7 @@
 			$this->_birth_planets = $birth_report->getPlanets();
 			$birthHouses = $birth_report->getHouses();
 			$this->_birth_planets['ASC'] = $birthHouses['ASC'];
+			$this->_birth_houses = $birthHouses;
 			
 			$this->_start_planets = $start_report->getPlanets();
 		//	var_dump($this->_start_planets);
