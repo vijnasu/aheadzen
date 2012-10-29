@@ -25,6 +25,22 @@ class AnalyzeLongevity {
     $birth_sun = $birth_planets['Sun']['fulldegree'];
     $birth_moon = $birth_planets['Moon']['fulldegree'];
     $birth_asc = $birth_houses['ASC']['fulldegree'];
+    $janma_nakshatra_index = $this->_nakshatra28FromDegree($birth_moon);
+    
+    $kota_stambha = array($janma_nakshatra_index + 3, $janma_nakshatra_index + 10,
+			  $janma_nakshatra_index + 17, $janma_nakshatra_index + 24);
+    $kota_entrances = array($janma_nakshatra_index, $janma_nakshatra_index + 1,
+			    $janma_nakshatra_index + 2, $janma_nakshatra_index + 7,
+			    $janma_nakshatra_index + 8, $janma_nakshatra_index + 9,
+			    $janma_nakshatra_index + 14, $janma_nakshatra_index + 15,
+			    $janma_nakshatra_index + 16, $janma_nakshatra_index + 21,
+			    $janma_nakshatra_index + 22, $janma_nakshatra_index + 23);
+    $kota_exits = array($janma_nakshatra_index + 6, $janma_nakshatra_index + 5,
+			$janma_nakshatra_index + 4, $janma_nakshatra_index + 13,
+			$janma_nakshatra_index + 12, $janma_nakshatra_index + 11,
+			$janma_nakshatra_index + 20, $janma_nakshatra_index + 19,
+			$janma_nakshatra_index + 18, $janma_nakshatra_index + 27,
+			$janma_nakshatra_index + 26, $janma_nakshatra_index + 25);
 
     if (substr($start_day_number, -1) != 0) {
       $start_day_number = substr_replace($start_day_number + 10, 0, -1);
@@ -41,6 +57,8 @@ class AnalyzeLongevity {
     // Calculate transits    
     foreach (range($first_year, $first_year + 70) as $y) {
       $years[$y] = array();
+      $years[$y]['kota_stambha_transit'] = array();
+      $years[$y]['kota_entrance_exit_transit'] = array();
       $years[$y]['transit'] = array();
       $years[$y]['Ashtakvarga'] = array();
       $start = 0;
@@ -56,6 +74,25 @@ class AnalyzeLongevity {
 	$new_data['day'] = $date->format('d');
 	$current_chart = new AstroReport($new_data);
 	$current_planets = $current_chart->getPlanets();
+	
+	// calculate kota transits
+	foreach (AstroData::$BAD_PLANETS as $mal) {
+	  $current_planet = $current_planets[$mal]['fulldegree'];
+	  $current_nakshatra = $this->_nakshatra28FromDegree($current_planet);
+	  $current_ks_transit = $mal . " transits Kota Stambha.";
+	  if (!in_array($current_ks_transit, $years[$y]['kota_stambha_transit']) &&
+	      in_array($current_nakshatra, $kota_stambha)) {
+	    $years[$y]['kota_stambha_transit'][] = $current_ks_transit;
+	  }
+	  // TODO: handle retrograde
+	  $current_ee_transit = $mal . " transits a Kota entrance while a benefic transits an exit.";
+	  if (!in_array($current_ee_transit, $years[$y]['kota_entrance_exit_transit']) &&
+	      in_array($current_nakshatra, $kota_entrances) &&
+	      $this->_beneficTransitsExit($current_planets, $kota_exits)) {
+	    $years[$y]['kota_entrance_exit_transit'][] = $current_ee_transit;
+	  }
+	}
+
 	foreach ($slow_movers as $sm) {
 	  $current_planet = $current_planets[$sm]['fulldegree'];
 	  $current_asc_house = $this->inHouseRelativeTo($birth_asc, $current_planet);
@@ -90,6 +127,36 @@ class AnalyzeLongevity {
     }
 
     return $years;
+  }
+
+  private function _nakshatra28FromDegree($degree) {
+    $division = $degree/AstroData::$NAKSHATRA_SIZE;
+    $index = floor( $division );
+    // adjust index for 28 nakshatras
+    // 20 is Uttara Ashadha
+    if ($index == 20) {
+      // if in last quarter of Uttara Ashadha, set to Abhijit
+      if ($division - $index > 0.75)
+	$index = 21;
+      // 21 was Shravana, now Abhijit
+      // Shravana now 22
+    } elseif ($index == 21) {
+      // if not in first 15th of Shravana, set to new Shravana index
+      if ($division - $index > 1.0/15)
+	$index = 22;
+    } elseif ($index > 21) {
+      $index += 1;
+    }
+    return $index;
+  }
+
+  private function _beneficTransitsExit($current_planets, $exits) {
+    foreach (AstroData::$GOOD_PLANETS as $ben) {
+      $nakshatra = $this->_nakshatra28FromDegree($current_planets[$ben]['fulldegree']);
+      if (in_array($nakshatra, $exits))
+	return true;
+    }
+    return false;
   }
 
   private function _dateFromDayOfYear($day, $year) {
