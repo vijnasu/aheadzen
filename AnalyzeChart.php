@@ -447,6 +447,10 @@ class AnalyzeChart
 		return $text;
 
 	}
+	public function getPlanetPotency( $planet )
+	{
+		return $this->_Potency[$planet];
+	}
 	public function calculateSynastryPotency()
 	{
 		$this->_SynastryPotency['LIFE_LONG'] = 0;

@@ -128,7 +128,7 @@ class AstroData
 														)
 
 										);
-	public static $POSITION_GOOD_BAD = array( 'GOOD' => array(1,4,5,7,9,10), 'BAD' => array(2,3,6,8,11,12 ) );
+	public static $POSITION_GOOD_BAD = array( 'GOOD' => array(1,4,5,7,9,10,11), 'BAD' => array(2,6,8,12 ) );
 	public static $GOOD_PLANETS = array( 'Jupiter', 'Venus', 'Moon', 'Sun' );
 	public static $BAD_PLANETS = array( 'Saturn', 'Mars', 'Rahu', 'Ketu', 'Mercury'  );
 	public static $EXALTATION = array( 'Jupiter' => 95, 'Venus' => 327, 'Moon' => 33, 'Sun' => 10, 'Saturn' => 200, 'Mars' => 297, 'Mercury' => 165, 'Rahu' => 45, 'Ketu' => 225  );

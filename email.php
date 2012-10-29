@@ -283,6 +283,13 @@ class MyEmailTemplate
 	}
 	public function registrationNotification( $args )
 	{
+		global $wpdb;
+
+		$template_id = get_option( 'tpl_reg_notification',6);
+
+		$sql = "SELECT content FROM {$wpdb->prefix}wpmlthemes where id = $template_id";
+		$template = $wpdb->get_var( $sql );
+
 		$subject = 'Your Ask-Oracle.com Registration';
 
 		$message  = sprintf(__('Dear %s'), $args['name']) . "\r\n\r\n";
@@ -298,10 +305,17 @@ class MyEmailTemplate
 		$message .= "Ask-Oracle.com";
 
 		$this->_subject = $subject;
-		$this->_message = $message;
+		$this->_message = str_replace('[wpmlcontent]', $message, $template);
 	}
 	public function paymentNotification( $args )
 	{
+		global $wpdb;
+
+		$template_id = get_option( 'tpl_pay_notification',6);
+
+		$sql = "SELECT content FROM {$wpdb->prefix}wpmlthemes where id = $template_id";
+		$template = $wpdb->get_var( $sql );
+
 		$amount = '$' . $args['amount'];
 
 		switch ( $args['item_type'] )
@@ -332,7 +346,7 @@ class MyEmailTemplate
 		$message .= "Ask-Oracle.com";
 
 		$this->_subject = $subject;
-		$this->_message = $message;
+		$this->_message = str_replace('[wpmlcontent]', $message, $template);
 	}
 
 }
